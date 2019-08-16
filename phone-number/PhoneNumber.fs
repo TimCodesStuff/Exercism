@@ -3,14 +3,11 @@
 open System
 
 let clean (input: string) =   
+    let allowedPunctuation = Set.ofList [' '; '-'; '('; ')'; '+'; '.']
+    
     let inputTrimmed = 
         input 
-        |> Seq.filter(fun x -> not (x = ' '))
-        |> Seq.filter(fun x -> not (x = '-'))
-        |> Seq.filter(fun x -> not (x = '('))
-        |> Seq.filter(fun x -> not (x = ')'))
-        |> Seq.filter(fun x -> not (x = '+'))
-        |> Seq.filter(fun x -> not (x = '.'))
+        |> Seq.filter(fun x -> not (allowedPunctuation.Contains x))
     if inputTrimmed |> Seq.exists(fun x -> Char.IsLetter(x)) then 
         Error "alphanumerics not permitted"
     elif inputTrimmed |> Seq.exists(fun x -> not (Char.IsLetterOrDigit(x))) then
