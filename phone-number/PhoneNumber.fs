@@ -5,15 +5,11 @@ open System
 let clean (input: string) =   
     let allowedPunctuation = Set.ofList [' '; '-'; '('; ')'; '+'; '.']
     
-    let inputTrimmed = 
-        input 
-        |> Seq.filter(fun x -> not (allowedPunctuation.Contains x))
-    if inputTrimmed |> Seq.exists(fun x -> Char.IsLetter(x)) then 
-        Error "alphanumerics not permitted"
-    elif inputTrimmed |> Seq.exists(fun x -> not (Char.IsLetterOrDigit(x))) then
-        Error "punctuations not permitted"
-    else
-        inputTrimmed
+    match input |> Seq.filter(fun x -> not (allowedPunctuation.Contains x)) with
+    | phoneNumber when phoneNumber |> Seq.exists(fun x -> Char.IsLetter(x)) ->  Error "alphanumerics not permitted"
+    | phoneNumber when phoneNumber |> Seq.exists(fun x -> not (Char.IsLetterOrDigit(x))) ->  Error "punctuations not permitted"
+    | phoneNumber -> 
+        phoneNumber
         |> Seq.filter (fun x -> Char.IsDigit(x))
         |> String.Concat
         |> fun cleanedInput ->    
@@ -38,3 +34,4 @@ let clean (input: string) =
                     else Error "Numbers starting with a non '1' should be 10 digits long."
             | x when x > 11 -> Error "more than 11 digits"
             | _ -> Error "incorrect number of digits"
+           
