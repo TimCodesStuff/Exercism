@@ -3,7 +3,6 @@
 open System
 
 let IsSilence (input: string): bool =
-    input.Length = 0 ||
     input
     |> Seq.filter (fun c -> not (Char.IsWhiteSpace c))
     |> Seq.isEmpty
