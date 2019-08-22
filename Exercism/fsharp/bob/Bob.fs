@@ -1,31 +1,33 @@
 ﻿module Bob
 
 open System
-
-let IsSilence (input: string): bool =
+  
+let (|Silence|_|) input =
     input
     |> Seq.filter (fun c -> not (Char.IsWhiteSpace c))
     |> Seq.isEmpty
+    |> function
+       | true -> Some ()
+       | false -> None
 
-let IsYell (input: string): bool =
+let (|Yell|_|) input =
     if (Seq.isEmpty (Seq.filter (Char.IsLetter) input)) then
-        false
+        None
     else
          input
             |> Seq.filter (Char.IsLetter)
             |> Seq.exists (Char.IsLower) 
-            |> not
+            |> function
+               | false -> Some ()
+               | true -> None
 
-let IsQuestion (input: string): bool =
-    Seq.item (input.Length-1) input = '?'
-
-let IsYelledQuestion (input: string): bool =
-    IsYell input && IsQuestion input
+let (|Question|_|) (input: string) = 
+    if Seq.item (input.Length-1) input = '?' then Some () else None
 
 let response (input: string): string = 
     match input.TrimEnd() with
-    | str when IsSilence str -> "Fine. Be that way!"
-    | str when IsYelledQuestion str -> "Calm down, I know what I'm doing!"
-    | str when IsQuestion str -> "Sure."
-    | str when IsYell str -> "Whoa, chill out!"
+    | Silence -> "Fine. Be that way!"
+    | Yell & Question -> "Calm down, I know what I'm doing!"
+    | Question -> "Sure."
+    | Yell -> "Whoa, chill out!"
     | _ -> "Whatever."
