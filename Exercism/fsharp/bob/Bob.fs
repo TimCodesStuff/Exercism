@@ -15,11 +15,11 @@ let (|Yell|_|) input =
         None
     else
          input
-            |> Seq.filter (Char.IsLetter)
-            |> Seq.exists (Char.IsLower) 
-            |> function
-               | false -> Some ()
-               | true -> None
+        |> Seq.filter (Char.IsLetter)
+        |> Seq.exists (Char.IsLower) 
+        |> function
+            | false -> Some ()
+            | true -> None
 
 let (|Question|_|) (input: string) = 
     if Seq.item (input.Length-1) input = '?' then Some () else None
