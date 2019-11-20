@@ -1,14 +1,9 @@
-﻿public static class Pangram
+﻿using System.Linq;
+
+public static class Pangram
 {
     public static bool IsPangram(string input)
     {
-        foreach (char c in "abcdefghijklmnopqrstuvwxyz")
-        {
-            if (!input.ToLower().Contains(c))
-            {
-                return false;
-            }
-        }
-        return true;
+        return "abcdefghijklmnopqrstuvwxyz".All(input.ToLower().Contains);
     }
 }
